@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Aruku7230&#39;s Blog</title>
+    <link>/posts/</link>
+    <description>Recent content in Posts on Aruku7230&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 10 Sep 2022 22:07:26 +0900</lastBuildDate><atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Export query to csv from Oracle Database</title>
+      <link>/posts/export_query_to_csv_from_oracle_database/</link>
+      <pubDate>Sat, 10 Sep 2022 22:07:26 +0900</pubDate>
+      
+      <guid>/posts/export_query_to_csv_from_oracle_database/</guid>
+      <description>Export using SQLPlus prior to 12.2 -- Query の結果を CSV に出力するための設定 -- Query の出力項目のデータ型が数字の場合、追加の設定が必要かもしれない SET LINESIZE 2000 SET ECHO OFF SET FEEDBACK OFF SET HEADING OFF SET PAGESIZE 0 SET TIME OFF SET TIMING OFF SET TERMOUT OFF SET TRIMSPOOL ON SET VERIFY OFF -- レコードのデータをCSVファイルに出力する spool result_data.csv -- ヘーダだけを出力するため SELECT &amp;#39;&amp;#34;COL1&amp;#34;&amp;#39; || &amp;#39;,&amp;#39; || &amp;#39;&amp;#34;COL2&amp;#34;&amp;#39; || &amp;#39;,&amp;#39; || &amp;#39;&amp;#34;COL3&amp;#34;&amp;#39; FROM DUAL; -- COL1, COL2, COL3 のデータタイプが文字列の場合 SELECT &amp;#39;&amp;#34;&amp;#39; || REPLACE(COL1, &amp;#39;&amp;#34;&amp;#39;, &amp;#39;&amp;#34;&amp;#34;&amp;#39;) || &amp;#39;&amp;#34;,&amp;#39; || &amp;#39;&amp;#34;&amp;#39; || REPLACE(COL2, &amp;#39;&amp;#34;&amp;#39;, &amp;#39;&amp;#34;&amp;#34;&amp;#39;) || &amp;#39;&amp;#34;,&amp;#39; || &amp;#39;&amp;#34;&amp;#39; || REPLACE(COL3, &amp;#39;&amp;#34;&amp;#39;, &amp;#39;&amp;#34;&amp;#34;&amp;#39;) || &amp;#39;&amp;#34;&amp;#39; FROM ALL_DATA ; spool off Export using SQLPlus 12.</description>
+    </item>
+    
+  </channel>
+</rss>
