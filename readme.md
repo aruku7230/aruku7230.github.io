@@ -1,0 +1,1 @@
+Aruku7230's blog using [Hugo](https://gohugo.io/).
