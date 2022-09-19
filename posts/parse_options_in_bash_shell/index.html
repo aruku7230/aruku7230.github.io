@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Parse options in bash shell | Aruku7230&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="Parse options manually A good example is from Bash FAQ #35.
+It is very flexible, and can handle:
+Single-letter options (-v). GNU-style long options (--long-options). Tcl-style long options (-longopts). Options with or without arguments. Both --file FILE and --file=FILE can be handled. However, it do not support:
+Single-letter option splitting (like -xvf handled as -x -v -f). Options after positional arguments (like arg1 arg2 -v) Using getopt While getopts is a shell builtin command, getopt is an external program.">
+    <meta name="generator" content="Hugo 0.102.3" />
+    
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+
+    
+<link rel="stylesheet" href="../../ananke/css/main.min.css" >
+
+
+
+    
+    
+    
+      
+
+    
+
+    
+    
+    <meta property="og:title" content="Parse options in bash shell" />
+<meta property="og:description" content="Parse options manually A good example is from Bash FAQ #35.
+It is very flexible, and can handle:
+Single-letter options (-v). GNU-style long options (--long-options). Tcl-style long options (-longopts). Options with or without arguments. Both --file FILE and --file=FILE can be handled. However, it do not support:
+Single-letter option splitting (like -xvf handled as -x -v -f). Options after positional arguments (like arg1 arg2 -v) Using getopt While getopts is a shell builtin command, getopt is an external program." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/parse_options_in_bash_shell/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-09-19T00:00:00+09:00" />
+<meta property="article:modified_time" content="2022-09-19T00:00:00+09:00" />
+
+<meta itemprop="name" content="Parse options in bash shell">
+<meta itemprop="description" content="Parse options manually A good example is from Bash FAQ #35.
+It is very flexible, and can handle:
+Single-letter options (-v). GNU-style long options (--long-options). Tcl-style long options (-longopts). Options with or without arguments. Both --file FILE and --file=FILE can be handled. However, it do not support:
+Single-letter option splitting (like -xvf handled as -x -v -f). Options after positional arguments (like arg1 arg2 -v) Using getopt While getopts is a shell builtin command, getopt is an external program."><meta itemprop="datePublished" content="2022-09-19T00:00:00+09:00" />
+<meta itemprop="dateModified" content="2022-09-19T00:00:00+09:00" />
+<meta itemprop="wordCount" content="517">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Parse options in bash shell"/>
+<meta name="twitter:description" content="Parse options manually A good example is from Bash FAQ #35.
+It is very flexible, and can handle:
+Single-letter options (-v). GNU-style long options (--long-options). Tcl-style long options (-longopts). Options with or without arguments. Both --file FILE and --file=FILE can be handled. However, it do not support:
+Single-letter option splitting (like -xvf handled as -x -v -f). Options after positional arguments (like arg1 arg2 -v) Using getopt While getopts is a shell builtin command, getopt is an external program."/>
+
+	
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="../../" class="f3 fw2 hover-white no-underline white-90 dib">
+      
+        Aruku7230&#39;s Blog
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      
+<div class="ananke-socials">
+  
+</div>
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        POSTS
+      </aside>
+      
+
+
+
+
+
+
+
+
+
+
+  <div id="sharing" class="mt3 ananke-socials">
+    
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">Parse options in bash shell</h1>
+      
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2022-09-19T00:00:00+09:00">September 19, 2022</time>
+      
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><h1 id="parse-options-manually">Parse options manually</h1>
+<p>A good example is from
+<a href="https://mywiki.wooledge.org/BashFAQ/035#Manual_loop">Bash FAQ #35</a>.</p>
+<p>It is very flexible, and can handle:</p>
+<ul>
+<li>Single-letter options (<code>-v</code>).</li>
+<li>GNU-style long options (<code>--long-options</code>).</li>
+<li>Tcl-style long options (<code>-longopts</code>).</li>
+<li>Options with or without arguments.</li>
+<li>Both <code>--file FILE</code> and <code>--file=FILE</code> can be handled.</li>
+</ul>
+<p>However, it do not support:</p>
+<ul>
+<li>Single-letter option splitting (like <code>-xvf</code> handled as <code>-x -v -f</code>).</li>
+<li>Options after positional arguments (like <code>arg1 arg2 -v</code>)</li>
+</ul>
+<h1 id="using-getopt">Using <code>getopt</code></h1>
+<p>While <code>getopts</code> is a shell builtin command, <code>getopt</code> is an external program.
+There are two <code>getopt</code> programs: the old Unix <code>getopt</code>, and the new enhanced
+Linux <code>getopt</code>.</p>
+<p>The old Unix <code>getopt</code> have many
+<a href="https://mywiki.wooledge.org/ComplexOptionParsing#util-linux.27s_special_getopt">problems</a>,
+such as cannot handle empty arguments strings, or arguments with embedded whitespace.
+<strong>DO NOT USE IT</strong>.</p>
+<p>If Linux <code>getopt</code> is installed, it can handle all of the following and more:</p>
+<ul>
+<li>Single-letter options (<code>-v</code>).</li>
+<li>GNU-style long options (<code>--long-options</code>).</li>
+<li>Tcl-style long options (<code>-longopts</code>).</li>
+<li>Options with or without arguments.</li>
+<li>Both <code>--file FILE</code> and <code>--file=FILE</code> can be handled.</li>
+<li>Single-letter option splitting (like <code>-xvf</code> handled as <code>-x -v -f</code>).</li>
+<li>Options after positional arguments (like <code>arg1 arg2 -v</code>)</li>
+</ul>
+<h2 id="an-example-using-getopt">An example using <code>getopt</code></h2>
+<p>Refer to <a href="https://stackoverflow.com/a/29754866">hear</a> and
+<a href="https://unix.stackexchange.com/a/62961">here</a>, below is a example of using <code>getopt</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#! /usr/bin/env bash
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>set -o errexit -o nounset
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># === Print usage ==============================================================</span>
+</span></span><span style="display:flex;"><span>usage<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    cat <span style="color:#e6db74">&lt;&lt; USAGE 1&gt;&amp;2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Usage:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    $(basename -- &#34;$0&#34;) [options] download &lt;remote-path&gt; &lt;local-path&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    $(basename -- &#34;$0&#34;) [options] upload   &lt;local-path&gt; &lt;remote-path&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Options
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    -h, --help
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          print help.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    -m, --move-to &lt;destination folder&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          when downloading finished, move remote resource to remote destination folder.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          or, when uploading finished, move local resource to local destination folder.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">USAGE</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ==============================================================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Parse arguments</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ==============================================================================</span>
+</span></span><span style="display:flex;"><span>parse_args<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    local options<span style="color:#f92672">=</span>hm:
+</span></span><span style="display:flex;"><span>    local longoptions<span style="color:#f92672">=</span>help,move-to:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> ! params<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>getopt --options $options --longoptions $longoptions <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>        --name <span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>basename -- <span style="color:#e6db74">&#34;</span>$0<span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> -- <span style="color:#e6db74">&#34;</span>$@<span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        usage; <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    eval set -- <span style="color:#e6db74">&#34;</span>$params<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    help<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;n&#34;</span>
+</span></span><span style="display:flex;"><span>    move_to<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    action<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    remote_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    local_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> true
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;</span>$1<span style="color:#e6db74">&#34;</span> in
+</span></span><span style="display:flex;"><span>            -m|--move-to<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>                move_to<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$2<span style="color:#e6db74">&#34;</span>; shift 2;;
+</span></span><span style="display:flex;"><span>            -h|--help<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>                usage; help<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;y&#34;</span>; <span style="color:#66d9ef">return</span> 0;;
+</span></span><span style="display:flex;"><span>            --<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>                shift; break;;
+</span></span><span style="display:flex;"><span>            *<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>                usage; <span style="color:#66d9ef">return</span> 1;;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">esac</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># After option parsing, remained arguments should be 3.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> $# -ne <span style="color:#ae81ff">3</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        usage; <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    action<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$1<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;</span>$action<span style="color:#e6db74">&#34;</span> in
+</span></span><span style="display:flex;"><span>        download<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>            remote_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$2<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>            local_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$3<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>            ;;
+</span></span><span style="display:flex;"><span>        upload<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>            local_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$2<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>            remote_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$3<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>            ;;
+</span></span><span style="display:flex;"><span>        *<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>            usage; <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>            ;;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">esac</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>download<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    :
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>upload<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    :
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>parse_args <span style="color:#e6db74">&#34;</span>$@<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[[</span> <span style="color:#e6db74">&#34;</span>$help<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;y&#34;</span> <span style="color:#f92672">]]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    exit 0;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;</span>$action<span style="color:#e6db74">&#34;</span> in
+</span></span><span style="display:flex;"><span>    download<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        download remote_path local_path
+</span></span><span style="display:flex;"><span>        ;;
+</span></span><span style="display:flex;"><span>    upload<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        upload local_path remote_path
+</span></span><span style="display:flex;"><span>        ;;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">esac</span>
+</span></span></code></pre></div><h1 id="using-getopts">Using <code>getopts</code></h1>
+<p><code>getopts</code> is a shell builtin command. It is limited to parse single-letter options
+and allow single-letter option splitting (like <code>-xvf</code> handled as <code>-x -v -f</code>)</p>
+<p>The most disadvantage is that it can not handle GNU-style long option
+(<code>--long-option</code>), and others it do not support are</p>
+<ul>
+<li>Options after positional arguments (like <code>arg1 arg2 -v</code>)</li>
+<li>Tcl-style long options (<code>-longopts</code>).</li>
+</ul>
+<p>Tutorials on how to use <code>getopts</code></p>
+<ul>
+<li><a href="https://www.howtogeek.com/778410/how-to-use-getopts-to-parse-linux-shell-script-options/">How to Use getopts to Parse Linux Shell Script Options</a></li>
+<li><a href="https://wiki.bash-hackers.org/howto/getopts_tutorial">Small getopts tutorial</a></li>
+</ul>
+<h1 id="conclusion">Conclusion</h1>
+<ul>
+<li>Parse options manually if you want most compatibility (works on most OS), and
+options is not complicated.</li>
+<li>Use <code>getopt</code> if you can ensure Linux <code>getopt</code> is installed and want to support
+a variety ways of specifying options.</li>
+<li>Use <code>getopts</code> if only one-letter options are used.</li>
+</ul>
+<ul class="pa0">
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="../../" >
+    &copy;  Aruku7230's Blog 2022 
+  </a>
+    <div>
+<div class="ananke-socials">
+  
+</div>
+</div>
+  </div>
+</footer>
+
+  </body>
+</html>

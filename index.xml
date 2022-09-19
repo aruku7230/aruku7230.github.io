@@ -6,7 +6,19 @@
     <description>Recent content on Aruku7230&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 10 Sep 2022 22:07:26 +0900</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 19 Sep 2022 00:00:00 +0900</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Parse options in bash shell</title>
+      <link>/posts/parse_options_in_bash_shell/</link>
+      <pubDate>Mon, 19 Sep 2022 00:00:00 +0900</pubDate>
+      
+      <guid>/posts/parse_options_in_bash_shell/</guid>
+      <description>Parse options manually A good example is from Bash FAQ #35.
+It is very flexible, and can handle:
+Single-letter options (-v). GNU-style long options (--long-options). Tcl-style long options (-longopts). Options with or without arguments. Both --file FILE and --file=FILE can be handled. However, it do not support:
+Single-letter option splitting (like -xvf handled as -x -v -f). Options after positional arguments (like arg1 arg2 -v) Using getopt While getopts is a shell builtin command, getopt is an external program.</description>
+    </item>
+    
     <item>
       <title>Export query to csv from Oracle Database</title>
       <link>/posts/export_query_to_csv_from_oracle_database/</link>
