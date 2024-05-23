@@ -1,5 +1,5 @@
-# baseURL = 'https://aruku7230.github.io/'
-relativeURLs = true
+baseURL = 'https://blog.xzyu.me/'
+# relativeURLs = true
 languageCode = 'en-us'
 title = "Aruku7230's Blog"
 theme = 'ananke'
