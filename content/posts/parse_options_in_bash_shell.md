@@ -1,11 +1,9 @@
 ---
 title: "Parse options in bash shell"
-date: 2022-09-19T00:00:00+09:00
-lastmod: 2022-09-19T00:00:00+09:00
+date: 2022-09-19
+lastmod: 2022-09-19
 draft: false
 ---
-
-[//]: <> ( spell-checker:words getopt getopts longopts )
 
 # Parse options manually
 
