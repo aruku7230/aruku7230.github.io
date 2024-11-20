@@ -3,6 +3,9 @@ title: "How to Encrypt External Hard Disk on Ubuntu 20.04"
 date: 2023-05-07
 lastmod: 2024-05-23
 draft: false
+tags:
+  - linux
+  - encryption
 ---
 
 ## LUKS Versions

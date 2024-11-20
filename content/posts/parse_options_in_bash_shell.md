@@ -3,9 +3,12 @@ title: "Parse options in bash shell"
 date: 2022-09-19
 lastmod: 2022-09-19
 draft: false
+tags:
+  - bash
+  - linux
 ---
 
-# Parse options manually
+## Parse options manually
 
 A good example is from
 [Bash FAQ #35](https://mywiki.wooledge.org/BashFAQ/035#Manual_loop).
@@ -21,7 +24,7 @@ However, it do not support:
 - Single-letter option splitting (like `-xvf` handled as `-x -v -f`).
 - Options after positional arguments (like `arg1 arg2 -v`)
 
-# Using `getopt`
+## Using `getopt`
 
 While `getopts` is a shell builtin command, `getopt` is an external program.
 There are two `getopt` programs: the old Unix `getopt`, and the new enhanced
@@ -143,7 +146,7 @@ case "$action" in
 esac
 ```
 
-# Using `getopts`
+## Using `getopts`
 
 `getopts` is a shell builtin command. It is limited to parse single-letter options
 and allow single-letter option splitting (like `-xvf` handled as `-x -v -f`)
@@ -157,7 +160,7 @@ Tutorials on how to use `getopts`
 - [How to Use getopts to Parse Linux Shell Script Options](https://www.howtogeek.com/778410/how-to-use-getopts-to-parse-linux-shell-script-options/)
 - [Small getopts tutorial](https://wiki.bash-hackers.org/howto/getopts_tutorial)
 
-# Conclusion
+## Conclusion
 - Parse options manually if you want most compatibility (works on most OS), and
   options is not complicated.
 - Use `getopt` if you can ensure Linux `getopt` is installed and want to support

@@ -4,6 +4,8 @@ date: 2024-10-03
 lastmod: 2024-10-18
 draft: false
 slug: clean-my-air-conditioner-on-my-own
+tags:
+  - life-in-japan
 ---
 
 ## 为什么选择自己清洗空调

@@ -3,10 +3,14 @@ title: "Export query to csv from Oracle Database"
 date: 2022-09-10
 lastmod: 2022-09-10
 draft: false
+tags:
+  - database
+  - sql
 ---
 
-* Export using SQLPlus prior to 12.2
-#+begin_src sql
+## Export using SQLPlus prior to 12.2
+
+```sql
 -- Query の結果を CSV に出力するための設定
 -- Query の出力項目のデータ型が数字の場合、追加の設定が必要かもしれない
 SET LINESIZE 2000
@@ -39,10 +43,11 @@ FROM ALL_DATA
 ;
 
 spool off
-#+end_src
+```
 
-* Export using SQLPlus 12.2 and above
-#+begin_src sql
+## Export using SQLPlus 12.2 and above
+
+```sql
 set markup csv on
 <sql query>
 #+end_src
@@ -51,4 +56,4 @@ set markup csv on
 #+begin_src sql
 SET SQLFORMAT csv
 SELECT * FROM HR.EMPLOYEES;
-#+end_src
+```
